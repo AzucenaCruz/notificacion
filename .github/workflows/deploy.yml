@@ -33,4 +33,11 @@ jobs:
             docker network create spring-net || true
             docker stop notificacion-app || true
             docker rm notificacion-app || true
-            docker run -d --name notificacion-app --network spring-net --memory="2048m" --cpus="2" -p 8091:8091 notificacion-app
+            docker run -d --name notificacion-app \
+              --network spring-net \
+              --memory="2048m" \
+              --cpus="2" \
+              -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/manager \
+              -e SPRING_DATASOURCE_USERNAME=root \
+              -e SPRING_DATASOURCE_PASSWORD=cruz123 \
+              -p 8091:8091 notificacion-app
