@@ -30,6 +30,7 @@ jobs:
           script: |
             cd ~/SpringTest/docker-notificacion
             docker build -t notificacion-app .
+            docker network create spring-net || true
             docker stop notificacion-app || true
             docker rm notificacion-app || true
-            docker run -d --name notificacion-app --memory="2048m" --cpus="2" -p 8091:8091 notificacion-app
+            docker run -d --name notificacion-app --network spring-net --memory="2048m" --cpus="2" -p 8091:8091 notificacion-app
