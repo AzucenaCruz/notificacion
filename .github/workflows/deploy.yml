@@ -1,1 +1,35 @@
-
+name: Deploy Notificion to VPS
+ 
+on:
+  push:
+    branches: [ "main" ]
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+ 
+      - name: Copy project to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "."
+          target: "~/SpringTest/docker-notificacion"
+ 
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/SpringTest/docker-notificacion
+            docker build -t notificacion-app .
+            docker stop notificacion-app || true
+            docker rm notificacion-app || true
+            docker run -d --name notificacion-app -p 8091:8091 notificacion-app
