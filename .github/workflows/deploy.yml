@@ -32,4 +32,4 @@ jobs:
             docker build -t notificacion-app .
             docker stop notificacion-app || true
             docker rm notificacion-app || true
-            docker run -d --name notificacion-app -p 8091:8091 notificacion-app
+            docker run -d --name notificacion-app --memory="2048m" --cpus="2" -p 8091:8091 notificacion-app
